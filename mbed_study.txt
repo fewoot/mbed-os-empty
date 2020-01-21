@@ -186,19 +186,54 @@ SPI 对象(   mosi输入引脚,
         .unlock();                                   //解除独占
 +int    .write(整型数据);                             //写入数据，返回响应
 ---------------------------------------------------------------------------------------
+I2C 对象(SDA数据引脚, SCL时钟引脚);                       //新建一个I2C连接
+        .abort_transfer();                              //中止传输
+        .frequency(赫兹);                               //设置赫兹频率
+        .lock();                                        //获得独占权
+        .unlock();                                      //释放访问权
++int    .read(  int 地址,
+                char* 数据,
+                int 长度,
+                bool 重复（默认否）
+             );                                         //读取，返回成功（0），失败（非0）
++int    .read(指示符（1表示是）);                        //读取一个字符，返回字符
+        .start();                                       //创建启动情况
+        .stop();                                        //创建停止情况
++int    .transfer(  int 地址
+                    char* TX缓冲区
+                    int TX长度
+                    char* RX缓冲区
+                    int RX长度
+                    函数
+                    int 事件逻辑，默认为I2C_EVENT_TRANSFER_COMPLETE
+                    bool 是否重复，默认为false 
+                 );                                     //开始传输，如果一开始，返回0，繁忙-1
++int    .write( int 地址
+                char* 数据
+                int 长度
+                bool 是否重复，默认为false
+              );                                        //写入，返回成功0，否则非0
++int    .write(整型数据);                               //写入单字节，返回收到NAK-0，收到ACK-1，超时-2
+----------------------------------------------------------------------------------------
+Thread 对象(    优先权，默认为osPriorityNormal,
+                占用大小，默认OS_STACK_SIZE,
+                栈堆指针，默认为nullptr,
+                线程名称，默认为nullptr,
+           );                                           //分配线程，不执行
+osThreadId_t    .get_id();                              //获取线程ID
+char*           .get_name();                            //获取线程名字（未设置为nullptr）
+                .join();                                //等待线程中止
+osPriority      .get_priority();                        //获得线程优先级
+osStatus        .set_priority();                        //设置优先级
+osStatus        .start(无返回函数);                      //启动线程，只能启动一次
+osStatus        .terminate();                           //终止线程，并从等待执行中删除
+
+---------------------------------------------------------------------------------
 =====================================================================================
 
 volatile 关键字，提示程序此值随时会变
 构造函数，构析函数
--------------------------------------------------------------
-Thread 多线程
-    Thread 对象(执行函数)
-    对象.sleep
-    对象.join
-    对象.detach
-    #include <mutex>保证变量在多线程中同步
-    在mbed中不同，相关资料：https://os.mbed.com/docs/mbed-os/v5.15/apis/platformmutex.html
---------------------------------------------------------------------
+
 time(NULL) 返回时间，秒为单位
     set_time(秒数) 设置时间
 文件读取相关：https://os.mbed.com/docs/mbed-os/v5.15/apis/filehandle.html
