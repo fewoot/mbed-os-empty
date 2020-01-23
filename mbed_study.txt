@@ -12,6 +12,8 @@
 程序
 //------------------------------------↑
 ------------------------------------------------------------------------
+在mbed中，引脚号有自己的数据类型->PinName
+---------------------------------------------------------------
 
 AnalogIn 自定义对象(引脚);                         //ADC读取
 +float            .read();                        //读取模拟输入值（值从 0.0 到 1.0 与主板最大电压成比例的小数）
@@ -137,8 +139,7 @@ string reset_reason_to_string(const reset_reason_t reason){     //对此原因�
 }
 reset_reason_to_string(reason).c_str();                         //输出原因
 -------------------------------------------------------------------------------
-RawSerial 对象(USBTX, USBRX, 波特率);                                       //创建串口，收发引脚不填默认为NC，波特率默认为MBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE
-        对象.putc(对象.getc());                                             //打印输入的字符6
+RawSerial 对象(USBTX (PA_2), USBRX (PA_3), 波特率);                         //创建串口，收发引脚不填默认为NC，波特率默认为MBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE        
         .printf("...");                                                    //串口打印，C++语法
         .abort_read();                                                     //中止正在进行的读取传输
         .abort_write();                                                     //中止正在进行的写传输
@@ -153,6 +154,7 @@ RawSerial 对象(USBTX, USBRX, 波特率);                                      
 +int    .putc(整型字符);                                                    //发送一个字符，返回字符或错误（-1）
 +int    .puts(char字符串);                                                  //发送一个字符串，返回成功（0）或错误（EOF）
                                                                             //详情：https://os.mbed.com/docs/mbed-os/v5.15/mbed-os-api-doxy/classmbed_1_1_raw_serial.html
+        对象.putc(对象.getc());                                             //打印输入的字符6
 -------------------------------------------------------------------------------
 Serial和RawSerial用法近似，详情：https://os.mbed.com/docs/mbed-os/v5.15/apis/serial.html
 ------------------------------------------------------------------------------------
@@ -215,10 +217,10 @@ I2C 对象(SDA数据引脚, SCL时钟引脚);                       //新建一�
               );                                        //写入，返回成功0，否则非0
 +int    .write(整型数据);                               //写入单字节，返回收到NAK-0，收到ACK-1，超时-2
 ----------------------------------------------------------------------------------------
-Thread 对象(    优先权，默认为osPriorityNormal,
-                占用大小，默认OS_STACK_SIZE,
-                栈堆指针，默认为nullptr,
-                线程名称，默认为nullptr,
+Thread 对象(    优先权，默认为osPriorityNormal，可以不填,
+                占用大小，默认OS_STACK_SIZE，可以不填,
+                栈堆指针，默认为nullptr，可以不填,
+                线程名称，默认为nullptr，可以不填,
            );                                           //分配线程，不执行
 osThreadId_t    .get_id();                              //获取线程ID
 char*           .get_name();                            //获取线程名字（未设置为nullptr）
